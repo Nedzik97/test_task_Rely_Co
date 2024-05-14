@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { useCharactersContext } from '../context/characters-context';
+import { Character } from '../types';
 
-export const usePagination = () => {
-  const { charactersList } = useCharactersContext();
+export const usePagination = (charactersList: Character[]) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 

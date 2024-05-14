@@ -1,33 +1,38 @@
-// import { useState } from 'react';
-// import { useCharactersContext } from '../context/characters-context';
+import { useState } from 'react';
+import { Character } from '../types';
 
-// export const useFilter = () => {
-//   const { charactersList } = useCharactersContext();
-//   const [statusFilter, setStatusFilter] = useState<string>();
-//   const [speciesFilter, setSpeciesFilter] = useState<string>();
+export const useFilter = (charactersList: Character[]) => {
+  const [filters, setFilters] = useState<{
+    status: string | undefined;
+    species: string | undefined;
+    gender: string | undefined;
+  }>({
+    status: undefined,
+    species: undefined,
+    gender: undefined,
+  });
 
-//   const handleStatusFilterChange = (
-//     e: React.ChangeEvent<HTMLSelectElement>
-//   ) => {
-//     setStatusFilter(e.target.value);
-//   };
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    filterType: 'status' | 'species' | 'gender'
+  ) => {
+    const value = e.target.value;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterType]: value,
+    }));
+  };
 
-//   const handleSpeciesFilterChange = (
-//     e: React.ChangeEvent<HTMLSelectElement>
-//   ) => {
-//     setSpeciesFilter(e.target.value);
-//   };
+  const filteredCharacters = charactersList.filter((character) => {
+    return (
+      (!filters.status || character.status === filters.status) &&
+      (!filters.species || character.species === filters.species) &&
+      (!filters.gender || character.gender === filters.gender)
+    );
+  });
 
-//   const filteredCharacters = charactersList.filter((character) => {
-//     return (
-//       (!statusFilter || character.status === statusFilter) &&
-//       (!speciesFilter || character.species === speciesFilter)
-//     );
-//   });
-
-//   return {
-//     handleStatusFilterChange,
-//     handleSpeciesFilterChange,
-//     filteredCharacters,
-//   };
-// };
+  return {
+    filteredCharacters,
+    handleFilterChange,
+  };
+};

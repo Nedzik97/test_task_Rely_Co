@@ -1,7 +1,7 @@
 import { Pagination } from '../pagination/pagination.tsx';
 import { usePagination } from '../../hooks/usePagination.tsx';
-import { useState } from 'react';
 import { useCharactersContext } from '../../context/characters-context.tsx';
+import { useFilter } from '../../hooks/useFilter.tsx';
 
 import styles from './characters-list.module.scss';
 
@@ -10,40 +10,10 @@ type CharacterslistProps = {
 };
 
 export const Characterslist = ({ setIsFormOpen }: CharacterslistProps) => {
-  const [filters, setFilters] = useState<{
-    status: string | undefined;
-    species: string | undefined;
-  }>({
-    status: undefined,
-    species: undefined,
-  });
-
-  const { setSelectedCharacter } = useCharactersContext();
-  const {
-    currentPage,
-    itemsPerPage,
-    charactersList,
-    handlePageClick,
-    // displayedCharacters,
-  } = usePagination();
-
-  const handleFilterChange = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-    filterType: 'status' | 'species'
-  ) => {
-    const value = e.target.value;
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [filterType]: value,
-    }));
-  };
-
-  const filteredCharacters = charactersList.filter((character) => {
-    return (
-      (!filters.status || character.status === filters.status) &&
-      (!filters.species || character.species === filters.species)
-    );
-  });
+  const { setSelectedCharacter, charactersList } = useCharactersContext();
+  const { handleFilterChange, filteredCharacters } = useFilter(charactersList);
+  const { currentPage, itemsPerPage, handlePageClick, displayedCharacters } =
+    usePagination(filteredCharacters);
 
   return (
     <>
@@ -75,9 +45,22 @@ export const Characterslist = ({ setIsFormOpen }: CharacterslistProps) => {
             </select>
           </div>
         </div>
+        <div className={styles.selectWrapper}>
+          <label htmlFor="genderFilter">Filter by Gender:</label>
+          <div className={styles.selectContainer}>
+            <select
+              id="speciesFilter"
+              onChange={(e) => handleFilterChange(e, 'gender')}
+            >
+              <option value="">All</option>
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div className={styles.characterList}>
-        {filteredCharacters.map((character) => (
+        {displayedCharacters.map((character) => (
           <li
             key={character.id}
             className={styles.character}
@@ -105,7 +88,7 @@ export const Characterslist = ({ setIsFormOpen }: CharacterslistProps) => {
         ))}
       </div>
       <Pagination
-        totalItems={charactersList.length}
+        totalItems={filteredCharacters.length}
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
         handlePageClick={handlePageClick}

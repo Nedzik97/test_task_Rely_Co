@@ -43,8 +43,6 @@ export const CharactersProvider = ({ children }: MoviesProviderProps) => {
     );
   };
 
-  console.log(selectedCharacter);
-
   useEffect(() => {
     getCharacterList();
   }, []);
