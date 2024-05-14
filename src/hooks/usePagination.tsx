@@ -3,7 +3,7 @@ import { Character } from '../types';
 
 export const usePagination = (charactersList: Character[]) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 8;
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;

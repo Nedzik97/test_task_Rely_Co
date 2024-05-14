@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -45,8 +49,8 @@ img {
 
 body {
 	width: 100%;
-  min-height: 100vh;
-	background-color: rgb(39, 43, 51);;
+  height: 100vh;
+	background-color: rgb(39, 43, 51);
 }
 
 li {
