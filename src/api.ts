@@ -1,10 +1,10 @@
-import { Character } from "./types";
+import { CharacterType } from "./types";
 
 type CharacterData = {
-  results: Character[];
+  results: CharacterType[];
 };
 
-export const getCharacterList = async (): Promise<Character[]> => {
+export const getCharacterList = async (): Promise<CharacterType[]> => {
   const res = await fetch('https://rickandmortyapi.com/api/character');
   const data: CharacterData = await res.json();
   const results = data.results;
