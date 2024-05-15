@@ -1,6 +1,12 @@
-export const getData = <T>(url: string, onSuccess: (res: T) => void, onError: (error: Error) => void) => {
-	return fetch(url)
-	.then((res) => res.json())
-	.then(res => onSuccess(res))
-	.catch((error) => onError(error))
-}
+import { Character } from "./types";
+
+type CharacterData = {
+  results: Character[];
+};
+
+export const getCharacterList = async (): Promise<Character[]> => {
+  const res = await fetch('https://rickandmortyapi.com/api/character');
+  const data: CharacterData = await res.json();
+  const results = data.results;
+  return results;
+};

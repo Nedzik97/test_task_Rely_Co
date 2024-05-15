@@ -1,27 +1,31 @@
 import { useState } from 'react';
 import { Character } from '../types';
 
-export const usePagination = (charactersList: Character[]) => {
+const ITEMS_PER_PAGE = 6;
+
+export const usePagination = (charactersList: Character[] | undefined) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-
-  const displayedCharacters = charactersList.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const resetPage = () => {
+    setCurrentPage(1);
+  };
 
   const handlePageClick = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
 
+  const displayedCharacters = charactersList?.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
   return {
     currentPage,
-    itemsPerPage,
+    ITEMS_PER_PAGE,
     charactersList,
-    handlePageClick,
     displayedCharacters,
+    handlePageClick,
+    resetPage,
+    setCurrentPage,
   };
 };

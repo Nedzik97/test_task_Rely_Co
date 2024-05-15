@@ -14,8 +14,5 @@ export type Character = {
     name: string;
     url: string;
   };
+	episode: string[]
 };
-
-export type characterResponse = {
-  results: Array<Character>;
-}

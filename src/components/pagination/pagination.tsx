@@ -1,7 +1,7 @@
 import React from 'react';
 
 type PaginationProps = {
-  totalItems: number;
+  totalItems: number | undefined;
   itemsPerPage: number;
   currentPage: number;
   handlePageClick: (pageNumber: number) => void;
@@ -12,16 +12,17 @@ export const Pagination: React.FC<PaginationProps> = ({
   itemsPerPage,
   currentPage,
   handlePageClick,
-}) => {
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+}): JSX.Element => {
+  const totalPages =
+    totalItems && itemsPerPage ? Math.ceil(totalItems / itemsPerPage) : 0;
 
   const handleClick = (pageNumber: number) => {
     handlePageClick(pageNumber);
   };
 
   return (
-    <div className="flex justify-center">
-      <ul className="flex items-center space-x-4">
+    <div className="sticky bottom-0 left-0 w-full">
+      <ul className="flex items-center justify-center space-x-4 overflow-x-auto">
         {[...Array(totalPages)].map((_, index) => (
           <li
             key={index + 1}
@@ -32,7 +33,8 @@ export const Pagination: React.FC<PaginationProps> = ({
           >
             <a
               href="#"
-              className="flex justify-center items-center w-12 h-12 text-white text-lg font-medium transition hover:bg-blue-300 rounded-full"
+              className="flex justify-center items-center w-12 h-12 
+            text-white text-lg font-medium transition hover:bg-blue-300 rounded-full"
             >
               {index + 1}
             </a>

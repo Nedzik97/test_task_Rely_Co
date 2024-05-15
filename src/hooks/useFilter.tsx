@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Character } from '../types';
 
-export const useFilter = (charactersList: Character[]) => {
+export const useFilter = (charactersList: Character[] | undefined) => {
   const [filters, setFilters] = useState<{
     status: string | undefined;
     species: string | undefined;
@@ -23,7 +23,7 @@ export const useFilter = (charactersList: Character[]) => {
     }));
   };
 
-  const filteredCharacters = charactersList.filter((character) => {
+  const filteredCharacters = charactersList?.filter((character) => {
     return (
       (!filters.status || character.status === filters.status) &&
       (!filters.species || character.species === filters.species) &&

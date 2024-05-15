@@ -5,15 +5,15 @@ import {
   SetStateAction,
   useContext,
   useState,
-  useEffect,
 } from 'react';
-import { getData } from '../api';
-
-import { Character, characterResponse } from '../types';
+import { useQuery } from 'react-query';
+import { Character } from '../types';
+import { getCharacterList } from '../api';
 
 type CharacterContextType = {
-  charactersList: Character[];
-  setCharactersList: Dispatch<SetStateAction<Character[]>>;
+  isLoading: boolean;
+  isError: boolean;
+  data: Character[] | undefined;
   selectedCharacter: Character | undefined;
   setSelectedCharacter: Dispatch<SetStateAction<Character | undefined>>;
 };
@@ -22,38 +22,23 @@ const CharactersContext = createContext<CharacterContextType>(
   {} as CharacterContextType
 );
 
-type MoviesProviderProps = {
+type CharactersProviderProps = {
   children: ReactNode;
 };
 
-export const CharactersProvider = ({ children }: MoviesProviderProps) => {
-  const [charactersList, setCharactersList] = useState<Character[]>([]);
+export const CharactersProvider = ({ children }: CharactersProviderProps) => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character>();
 
-  const getCharacterList = () => {
-    getData<characterResponse>(
-      'https://rickandmortyapi.com/api/character',
-      (data) => {
-        const characterList = data.results;
-        setCharactersList(characterList);
-      },
-      (error) => {
-        console.error('Произошла ошибка при получении данных:', error);
-      }
-    );
-  };
-
-  useEffect(() => {
-    getCharacterList();
-  }, []);
+  const { data, isLoading, isError } = useQuery('characters', getCharacterList);
 
   return (
     <CharactersContext.Provider
       value={{
-        charactersList,
-        setCharactersList,
+        data,
         selectedCharacter,
         setSelectedCharacter,
+        isLoading,
+        isError,
       }}
     >
       {children}
