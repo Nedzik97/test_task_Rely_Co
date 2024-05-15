@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Character } from '../types';
+import { CharacterType } from '../types';
 
-export const useFilter = (charactersList: Character[] | undefined) => {
+export const useFilter = (charactersList: CharacterType[] | undefined) => {
   const [filters, setFilters] = useState<{
     status: string | undefined;
     species: string | undefined;

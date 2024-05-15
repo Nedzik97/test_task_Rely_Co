@@ -4,11 +4,14 @@ import { createPortal } from 'react-dom';
 const modalRootElement = document.querySelector('#modal');
 
 type ModalProps = {
-  open: boolean;
+  isOpenned: boolean;
   children: ReactNode;
 };
 
-export const Modal = ({ open, children }: ModalProps): JSX.Element => {
+export const Modal = ({
+  isOpenned,
+  children,
+}: ModalProps): JSX.Element | null => {
   const element = useMemo(() => {
     return document.createElement('div');
   }, []);
@@ -23,8 +26,8 @@ export const Modal = ({ open, children }: ModalProps): JSX.Element => {
     };
   });
 
-  if (open) {
+  if (isOpenned) {
     return createPortal(children, element);
   }
-  return <></>;
+  return null;
 };

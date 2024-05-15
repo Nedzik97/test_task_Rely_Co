@@ -1,27 +1,27 @@
 import React from 'react';
+import { useCallback } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { useCharactersContext } from '../../context/characters-context.tsx';
 import { useFilter } from '../../hooks/useFilter.tsx';
 import { usePagination } from '../../hooks/usePagination.tsx';
 import { FilterSelect } from '../filter-select/filter-select.tsx';
 import { Character } from '../character/character.tsx';
 import { Pagination } from '../pagination/pagination.tsx';
+import { CharacterType } from '../../types.ts';
 
 type CharacterslistProps = {
-  setIsFormOpen: (isOpen: boolean) => void;
+  openModal: () => void;
+  selectCharacter: Dispatch<SetStateAction<CharacterType | undefined>>;
 };
 
 export const CharacterList: React.FC<CharacterslistProps> = ({
-  setIsFormOpen,
+  openModal,
+  selectCharacter,
 }) => {
-  const { setSelectedCharacter, data } = useCharactersContext();
+  const { data } = useCharactersContext();
   const { handleFilterChange, filteredCharacters } = useFilter(data);
-  const {
-    currentPage,
-    ITEMS_PER_PAGE,
-    handlePageClick,
-    displayedCharacters,
-    resetPage,
-  } = usePagination(filteredCharacters);
+  const { currentPage, changePage, displayedCharacters, resetPage } =
+    usePagination(filteredCharacters);
 
   const handleSelectChange = (
     e: React.ChangeEvent<HTMLSelectElement>,
@@ -30,6 +30,11 @@ export const CharacterList: React.FC<CharacterslistProps> = ({
     handleFilterChange(e, filterType);
     resetPage();
   };
+
+  const handleClick = useCallback((character: CharacterType) => {
+    openModal();
+    selectCharacter(character);
+  }, []);
 
   return (
     <>
@@ -66,10 +71,7 @@ export const CharacterList: React.FC<CharacterslistProps> = ({
             <Character
               key={character.id}
               character={character}
-              onClick={() => {
-                setIsFormOpen(true);
-                setSelectedCharacter(character);
-              }}
+              onClick={handleClick}
             />
           ))}
         </ul>
@@ -78,9 +80,8 @@ export const CharacterList: React.FC<CharacterslistProps> = ({
       )}
       <Pagination
         totalItems={filteredCharacters?.length}
-        itemsPerPage={ITEMS_PER_PAGE}
         currentPage={currentPage}
-        handlePageClick={handlePageClick}
+        changePage={changePage}
       />
     </>
   );

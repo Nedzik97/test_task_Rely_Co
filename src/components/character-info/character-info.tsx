@@ -1,15 +1,15 @@
 import React from 'react';
-import { useCharactersContext } from '../../context/characters-context.tsx';
+import { CharacterType } from '../../types.ts';
 
 type CharacterDetailsProps = {
-  setIsFormOpen: (isOpen: boolean) => void;
+  closeModal: (isOpen: boolean) => void;
+  selectedCharacter: CharacterType | undefined;
 };
 
 export const CharacterInfo: React.FC<CharacterDetailsProps> = ({
-  setIsFormOpen,
+  closeModal,
+  selectedCharacter,
 }): JSX.Element | null => {
-  const { selectedCharacter } = useCharactersContext();
-
   if (!selectedCharacter) {
     return null;
   }
@@ -24,7 +24,7 @@ export const CharacterInfo: React.FC<CharacterDetailsProps> = ({
           <h2 className="text-lg font-bold">Character details</h2>
           <button
             className="text-gray-600 hover:text-blue-500 w-5 h-5"
-            onClick={() => setIsFormOpen(false)}
+            onClick={() => closeModal(false)}
           >
             ✕
           </button>

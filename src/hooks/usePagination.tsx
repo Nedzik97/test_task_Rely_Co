@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import { Character } from '../types';
+import { useState, useCallback } from 'react';
+import { CharacterType } from '../types';
 
-const ITEMS_PER_PAGE = 6;
+export const ITEMS_PER_PAGE = 6;
 
-export const usePagination = (charactersList: Character[] | undefined) => {
+export const usePagination = (charactersList: CharacterType[] | undefined) => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const resetPage = () => {
+  const resetPage = useCallback(() => {
     setCurrentPage(1);
-  };
+  }, []);
 
-  const handlePageClick = (pageNumber: number) => {
+  const changePage = useCallback((pageNumber: number) => {
     setCurrentPage(pageNumber);
-  };
+  }, []);
 
   const displayedCharacters = charactersList?.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -21,10 +21,9 @@ export const usePagination = (charactersList: Character[] | undefined) => {
 
   return {
     currentPage,
-    ITEMS_PER_PAGE,
     charactersList,
     displayedCharacters,
-    handlePageClick,
+    changePage,
     resetPage,
     setCurrentPage,
   };
